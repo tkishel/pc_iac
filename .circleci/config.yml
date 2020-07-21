@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  scan: prisma_cloud/devops_security@1.0.0
+jobs:
+  scan_iac: scan/prisma_cloud
+workflows:
+  scan:
+    jobs:
+      - scan_iac:
+          context: prisma_cloud_context
+          prisma_cloud_api_url: https://api.prismacloud.io
+          access_key: e38fb21d-ee3a-438d-a48d-683e32793e53
+          secret_key: prisma_cloud_secret_key
+          templates_directory_path: modulo
+          failure_criteria_high_severity: 1
+          failure_criteria_medium_severity: 1
+          failure_criteria_low_severity: 1
+          failure_criteria_operator: or
