@@ -1,18 +1,58 @@
 version: 2.1
+
 orbs:
   scan: prisma_cloud/devops_security@1.0.0
+
 jobs:
   scan_iac: scan/prisma_cloud
+  docker_build_and_save:
+    executor: scan/compute
+    steps:
+      - checkout
+      - run: docker pull nginx
+      - run: mkdir -p workspace
+      - run: docker image
+      - run: 'docker save nginx:latest -o workspace/image.tar'
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - image.tar
+  scan_compute: scan/scan_image
+
 workflows:
   scan:
     jobs:
       - scan_iac:
+          # Retrieve CircleCI environment variables from a shared Context rather than the Project.
           context: prisma_cloud_context
           prisma_cloud_api_url: https://api.prismacloud.io
           access_key: e38fb21d-ee3a-438d-a48d-683e32793e53
+          # Name of the CircleCI environment variable containing the secret_key parameter.
           secret_key: prisma_cloud_secret_key
           templates_directory_path: modulo
           failure_criteria_high_severity: 1
-          failure_criteria_medium_severity: 1
-          failure_criteria_low_severity: 1
+          failure_criteria_medium_severity: 2
+          failure_criteria_low_severity: 3
           failure_criteria_operator: or
+  scan_compute:
+    # Example limiting image scanning to the master branch.
+    when:
+      equal: [ master, << pipeline.git.branch >> ]
+    jobs:
+      - docker_build_and_save
+      - scan_compute:
+          requires:
+            - docker_build_and_save
+          # Retrieve CircleCI environment variables from a shared Context rather than the Project.
+          context: prisma_cloud_context
+          ## URL from the Prisma Cloud interface, Manage->Defenders->Deploy
+          prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com/us-1-111573457
+          prisma_cloud_compute_user: tkishel@gmail.com
+          # Name of the CircleCI environment variable containing the prisma_cloud_compute_pass parameter.
+          prisma_cloud_compute_pass: prisma_cloud_compute_password
+          image: nginx:latest
+          image_tar: image.tar
+          ## Flags not available in TwistCLI v 20.04.169 ...
+          # vulnerability_threshold: critical
+          # compliance_threshold: ''
+          # only_fixed: true

@@ -16,8 +16,8 @@ failure_criteria_for_creating_checks:
 # The template for issues can be customized in the ".github/prisma-template-for-scan-results" file.
 failure_criteria_for_creating_issues:
   high: 1
-  medium: 1
-  low: 1
+  medium: 2
+  low: 3
   operator: or
   
 # Define github asset name.
