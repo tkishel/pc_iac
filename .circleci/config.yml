@@ -1,0 +1,78 @@
+version: 2.1
+
+orbs:
+  devops_security: prisma_cloud/devops_security@3.0.0
+
+jobs:
+  scan_compute:
+    executor: devops_security/compute
+    steps:
+      - checkout
+      - run: docker pull nginx
+      - devops_security/scan_image:
+          # Prisma Cloud Compute API.
+          #
+          prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com/us-1-111573457
+          #
+          # (Use an Access Key and Secret Key instead of a Username and Password when using SSO in Prisma Cloud.)
+          #
+          # Username, from the value of the predefined $prisma_cloud_compute_username CircleCI environment variable.
+          #   This is documented as a 'string':
+          #     https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/prisma-cloud-devops-security/use-the-prisma-cloud-plugin-for-circleci.html
+          #     https://circleci.com/developer/orbs/orb/prisma_cloud/devops_security
+          #   But, specifying a username in a public (or even a private) repository is problematic.
+          #   Thankfully, CircleCI allows us to specify it as CircleCI environment variable.
+          #
+          prisma_cloud_compute_username: $prisma_cloud_compute_username
+          #
+          # The name of the CircleCI environment variable containing the prisma_cloud_compute_password value.
+          #   This is documented as an 'environment variable' and 'env_var_name' in the above documentation.
+          #
+          prisma_cloud_compute_password: prisma_cloud_compute_password
+          #
+          # The name of the image to scan.
+          #
+          prisma_cloud_scan_image: nginx
+
+workflows:
+  scan:
+    # Example of limiting image scanning to the master branch.
+    when:
+      equal: [ master, << pipeline.git.branch >> ]
+    jobs:
+      - devops_security/scan_iac:
+          #
+          # Prisma Cloud API
+          #
+          prisma_cloud_api_url: https://api.prismacloud.io
+          #
+          # Access Key, from the value of the predefined $prisma_cloud_access_key CircleCI environment variable.
+          #   This is documented as a 'string':
+          #     https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/prisma-cloud-devops-security/use-the-prisma-cloud-plugin-for-circleci.html
+          #     https://circleci.com/developer/orbs/orb/prisma_cloud/devops_security
+          #   But, specifying an access key in a public (or even a private) repository is problematic.
+          #   Thankfully, CircleCI allows us to specify it as CircleCI environment variable.
+          #
+          prisma_cloud_access_key: $prisma_cloud_access_key
+          #
+          # Name of the CircleCI environment variable containing the prisma_cloud_secret_key value.
+          #   This is documented as an 'environment variable' and 'env_var_name' in the above documentation.
+          #
+          prisma_cloud_secret_key: prisma_cloud_secret_key
+          #
+          # Asset name, from the value of the predefined $CIRCLE_PROJECT_REPONAME CircleCI environment variable.
+          #
+          prisma_cloud_asset_name: $CIRCLE_PROJECT_REPONAME
+          #
+          # Gate based on the scan results.
+          #
+          prisma_cloud_failure_criteria: 'High:9,Medium:9,Low:9,Operator:OR'
+          #
+          # CircleCI does not read root_module(s) from .prismaCloud/config.yml and scans this prisma_cloud_repo_dir.
+          #
+          prisma_cloud_repo_dir: ./iac-api-v2
+          #
+          # CircleCI reads tags from .prismaCloud/config.yml and appends these prisma_cloud_tags).
+          #
+          prisma_cloud_tags: 'tool:CircleCI'
+      - scan_compute
