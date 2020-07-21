@@ -6,3 +6,5 @@ resource "aws_s3_bucket" "foo" {
      enabled = false
   }  
 }
+
+# comment
