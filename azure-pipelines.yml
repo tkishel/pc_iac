@@ -1,0 +1,16 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+- task: Prisma Cloud IaC Scan@2
+  inputs:
+    Path: '.'
+    prismaCloudService: 'TJK_PC_AZ'
+    High: '1'
+    Medium: '2'
+    Low: '3'
+    Operator: 'or'
