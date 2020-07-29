@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "foo" {
   bucket        = "bar"
-  acl           = "private"
+  acl           = "public-read-write"
   force_destroy = true
   versioning {
      enabled = false
