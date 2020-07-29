@@ -13,7 +13,7 @@ steps:
   - task: Prisma Cloud IaC Scan@2
     inputs:
       Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
-      prismaCloudService: 'TJK_PC_AZ'
+      prismaCloudService: 'PrismaCloud IAC QA'
       High: '1'
       Medium: '2'
       Low: '3'
