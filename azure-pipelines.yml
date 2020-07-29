@@ -4,13 +4,17 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  - master
 
-- task: Prisma Cloud IaC Scan@2
-  inputs:
-    Path: '.'
-    prismaCloudService: 'TJK_PC_AZ'
-    High: '1'
-    Medium: '2'
-    Low: '3'
-    Operator: 'or'
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: Prisma Cloud IaC Scan@2
+    inputs:
+      Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
+      prismaCloudService: 'TJK_PC_AZ'
+      High: '1'
+      Medium: '2'
+      Low: '3'
+      Operator: 'or'
