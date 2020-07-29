@@ -7,5 +7,9 @@ resource "aws_s3_bucket" "foo" {
   }  
 }
 
-#   acl           = "public-read-write"
-#   acl           = "private"
+# acl: "public-read-write" vs "private"
+# versioning enabled: true vs false
+
+#resource "google_storage_bucket" "foo" {
+#  name = "bar.example.com"
+#}
