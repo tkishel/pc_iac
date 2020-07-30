@@ -13,7 +13,7 @@ steps:
   - task: Prisma Cloud IaC Scan@2
     inputs:
       Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
-      prismaCloudService: 'TJK_PC_AZ'
+      prismaCloudService: 'PrismaCloudIACScanService'
       High: '1'
       Medium: '2'
       Low: '3'
@@ -24,8 +24,8 @@ steps:
       Dockerfile: '**/Dockerfile'
       arguments: '-t tryme'
       addPipelineData: false
-  - task: Prisma Cloud Compute Scan@2
+  - task: Prisma Cloud Compute IaC Scan@2
     inputs:
       scanType: 'images'
-      twistlockService: 'Prisma Cloud Compute Scan'
+      twistlockService: 'PrismaCloudComputeIACScanService'
       artifact: 'tryme'
