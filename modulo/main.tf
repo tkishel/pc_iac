@@ -20,8 +20,8 @@ resource "aws_s3_bucket" "foo" {
 # acl: "public-read-write" vs "private"
 # versioning enabled: true vs false
 
-resource "google_storage_bucket" "foo" {
-  name          = "bar-pc-iac"
-  location      = "us-west1"
-  force_destroy = true
-}
+#resource "google_storage_bucket" "foo" {
+#  name          = "bar-pc-iac"
+#  location      = "us-west1"
+#  force_destroy = true
+#}
