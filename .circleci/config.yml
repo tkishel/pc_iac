@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  scan: prisma_cloud/devops_security@1.0.0
+  scan: prisma_cloud/devops_security@2.1.0
 
 jobs:
   scan_iac: scan/prisma_cloud
