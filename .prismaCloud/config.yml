@@ -1,9 +1,13 @@
 template_type: TF
 terraform_version: 0.11
-#terraform_012_parameters:
-#  - root_module: modulo/
-#    variable_files:
-#    - modulo/variables.tf
+terraform_011_parameters:
+  variable_files:
+    - modulo/variables.tf
+# terraform_version: 0.12
+# terraform_012_parameters:
+#   - root_module: modulo/
+#     variable_files:
+#       - modulo/variables.tf
 tags:
   - 'Org: PANW'
   - 'Team: ShiftLeft'
