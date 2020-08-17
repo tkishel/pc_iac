@@ -5,11 +5,11 @@ provider "aws" {
 resource "aws_s3_bucket" "foo" {
   bucket        = "bar-pc-iac"
   region        = "us-west-2"
-  acl           = "private"
+  acl           = "public-read-write"
   force_destroy = true
   versioning {
      enabled = false
-  }  
+  }
 }
 
 # For comparison:
@@ -26,9 +26,29 @@ resource "aws_s3_bucket" "foo" {
 #provider "google" {
 #  region      = "us-west1"
 #}
-
+#
 #resource "google_storage_bucket" "foo" {
 #  name          = "bar-pc-iac"
 #  location      = "us-west1"
 #  force_destroy = true
+#}
+
+#provider "azurerm" {
+#  features {}
+#}
+
+#resource "azurerm_resource_group" "foo" {
+#  name     = "bar"
+#  location = "West Central US"
+#}
+
+#resource "azurerm_storage_account" "foo" {
+#  name                     = "bar"
+#  resource_group_name      = azurerm_resource_group.foo.name
+#  location                 = azurerm_resource_group.foo.location
+#  account_tier             = "Standard"
+#  account_replication_type = "LRS"
+#  network_rules {
+#    default_action = "Allow"
+#  }
 #}
