@@ -12,6 +12,8 @@ resource "aws_s3_bucket" "foo" {
   }  
 }
 
+# 
+
 # For comparison:
 #
 # acl: "public-read-write" vs "private"
