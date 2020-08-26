@@ -1,10 +1,11 @@
-variable "aws-region" {
-    default = "us-west-2"
+variable "aws_region" {
+  default = "us-west-2"
 }
 
-variable "az-region" {
-    default = "West Central US"
+variable "azure_region" {
+  default = "West Central US"
 }
-variable "gcp-region" {
-    default = "us-west1"
+
+variable "google_region" {
+  default = "us-west1"
 }
