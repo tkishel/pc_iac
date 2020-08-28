@@ -50,3 +50,5 @@ resource "google_storage_bucket" "foo" {
   location      = "${var.google_region}"
   force_destroy = true
 }
+
+# change
