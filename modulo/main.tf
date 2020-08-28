@@ -51,4 +51,4 @@ resource "google_storage_bucket" "foo" {
   force_destroy = true
 }
 
-# change
+# changes
