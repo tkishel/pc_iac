@@ -54,6 +54,7 @@ if [ -z "${ACTIVELOGIN}" ]; then
 fi
 
 if [ ! -s "${LOGIN}" ]; then
+  rm -f "${LOGIN}"
   echo "Error: API Login Failed"
   exit 1
 fi
@@ -62,6 +63,7 @@ fi
 
 TOKEN=$(jq -r '.token' < "${LOGIN}")
 if [ -z "${TOKEN}" ]; then
+  rm -f "${LOGIN}"
   echo "Error: API Login Token Missing"
   exit 1
 fi
@@ -99,4 +101,4 @@ fi
 
 #### OUTPUT RESULT
 
-jq < "${PSCAN}"
+cat "${PSCAN}" | jq '.result.rules_matched[] | {severity, name, description}'

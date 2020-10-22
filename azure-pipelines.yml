@@ -15,8 +15,8 @@ steps:
       Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
       prismaCloudService: 'PrismaCloudIACScanService'
       High: '1'
-      Medium: '2'
-      Low: '3'
+      Medium: '9'
+      Low: '5'
       Operator: 'or'
   - task: Docker@2
     inputs:
