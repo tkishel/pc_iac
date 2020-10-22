@@ -101,4 +101,4 @@ fi
 
 #### OUTPUT RESULT
 
-jq < "${PSCAN}"
+cat "${PSCAN}" | jq '.result.rules_matched[] | {severity, name, description}'
