@@ -49,7 +49,8 @@ workflows:
           context: prisma_cloud_context
           # URL from the Prisma Cloud interface, Manage->Defenders->Deploy
           prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com/us-1-111573457
-          prisma_cloud_compute_user: tkishel@gmail.com
+          # Use an Access Key and Secret Key instead of a Username and Password when using SSO.
+          prisma_cloud_compute_user: 74d186c2-3bb0-44cd-ba15-7dfe6a1818a8
           # Name of the CircleCI environment variable containing the prisma_cloud_compute_pass parameter.
           prisma_cloud_compute_pass: prisma_cloud_compute_password
           image: nginx:latest

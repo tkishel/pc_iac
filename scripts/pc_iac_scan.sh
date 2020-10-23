@@ -15,6 +15,8 @@
 
 #### BEGIN USER CONFIGURATION
 
+# Use an Access Key and Secret Key instead of a Username and Password when using SSO.
+
 # Prisma Cloud › Access URL: Prisma Cloud API URL
 API=https://api.prismacloud.io
 
