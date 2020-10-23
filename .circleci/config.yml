@@ -23,10 +23,11 @@ workflows:
   scan:
     jobs:
       - scan_iac:
-          # Retrieve CircleCI environment variables from a shared Context rather than the Project.
+          # Retrieve CircleCI environment variables from a shared Context,
+          # defined in Organization Settings rather than in Project Settings.
           context: prisma_cloud_context
           prisma_cloud_api_url: https://api.prismacloud.io
-          access_key: e38fb21d-ee3a-438d-a48d-683e32793e53
+          access_key: 74d186c2-3bb0-44cd-ba15-7dfe6a1818a8
           # Name of the CircleCI environment variable containing the secret_key parameter.
           secret_key: prisma_cloud_secret_key
           templates_directory_path: modulo
@@ -43,16 +44,17 @@ workflows:
       - scan_compute:
           requires:
             - docker_build_and_save
-          # Retrieve CircleCI environment variables from a shared Context rather than the Project.
+          # Retrieve CircleCI environment variables from a shared Context,
+          # defined in Organization Settings rather than in Project Settings.
           context: prisma_cloud_context
-          ## URL from the Prisma Cloud interface, Manage->Defenders->Deploy
+          # URL from the Prisma Cloud interface, Manage->Defenders->Deploy
           prisma_cloud_compute_url: https://us-east1.cloud.twistlock.com/us-1-111573457
           prisma_cloud_compute_user: tkishel@gmail.com
           # Name of the CircleCI environment variable containing the prisma_cloud_compute_pass parameter.
           prisma_cloud_compute_pass: prisma_cloud_compute_password
           image: nginx:latest
           image_tar: image.tar
-          ## Flags not available in TwistCLI v 20.04.169 ...
-          # vulnerability_threshold: critical
-          # compliance_threshold: ''
-          # only_fixed: true
+          # Flags not available in TwistCLI v 20.04.169 and later.
+          #  vulnerability_threshold: critical
+          #  compliance_threshold: ''
+          #  only_fixed: true
