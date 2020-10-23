@@ -1,4 +1,5 @@
 # Prisma Cloud IaC configuration file. 
+# Credentials (Access and SecretKey are defined within the Prisma Cloud app for GitHub.
 
 # Please update with the respective environment values and commit to master branch under the .github folder before performing scans.
 
