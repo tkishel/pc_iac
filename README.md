@@ -4,6 +4,7 @@
 
 A minimum viable Terraform project for IaC scanning via the following integrations.
 
+* AWS DevOps
 * Azure DevOps
 * CircleCI
 * GitHub
@@ -12,7 +13,6 @@ A minimum viable Terraform project for IaC scanning via the following integratio
 
 To Do:
 
-* AWS DevOps
 * GitLab
 * Jenkins
 

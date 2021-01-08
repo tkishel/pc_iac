@@ -1,0 +1,14 @@
+# AWS CodePipeline / CodeBuild
+
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - pcs_iac_repo_scan
+
+reports:
+  iac-reports:
+    files:
+      - report/iac_scan/results.xml
+    file-format: JUNITXML
