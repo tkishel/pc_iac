@@ -13,6 +13,7 @@ A minimum viable Terraform project for IaC scanning via the following integratio
 
 To Do:
 
+* BitBucket
 * GitLab
 * Jenkins
 
