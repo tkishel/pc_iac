@@ -10,6 +10,7 @@ terraform_012_parameters:
 #    - iac-api-v2/variables.tf
 #
 tags:
-  org: Palo Alto Networks
-  team: Prisma Cloud SE
-  env: Development
+  org: TJKPANW
+  team: TJKPC
+  group: TJKSE
+  env: TJKDEV
