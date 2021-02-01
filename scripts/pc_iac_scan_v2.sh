@@ -86,7 +86,11 @@ find_recurse_parent() {
 
 read_yaml() {
   if [ -n "${1}" ]; then
-    yq read -j "${1}"
+    if $(yq --version | grep 'version 3'); then
+      yq read -j "${1}"  
+    else
+      yq eval -j "${1}"  
+    fi
   fi
 }
 
@@ -378,7 +382,7 @@ TEMPLATE_ARCHIVE="/tmp/${TEMPLATE_BASENAME}.zip"
 if [ -d "${TEMPLATE}" ] || [ -f "${TEMPLATE}" ] ; then
   cd "${TEMPLATE_DIRNAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}"
   rm -r -f "${TEMPLATE_ARCHIVE}"
-  zip -r -q "${TEMPLATE_ARCHIVE}" "${TEMPLATE_BASENAME}" -x "*/.*"
+  zip -r -q "${TEMPLATE_ARCHIVE}" "${TEMPLATE_BASENAME}" -x "*/.*" "*terraform.tfstate*"
 else
   error_and_exit "Template file or directory to scan is not a file or directory: ${TEMPLATE}"
 fi
@@ -516,6 +520,8 @@ fi
 HIGH=$(  jq '.meta.matchedPoliciesSummary.high'   < "${PC_IAC_RESULTS}")
 MEDIUM=$(jq '.meta.matchedPoliciesSummary.medium' < "${PC_IAC_RESULTS}")
 LOW=$(   jq '.meta.matchedPoliciesSummary.low'    < "${PC_IAC_RESULTS}")
+
+debug "Scan Results: ${PC_IAC_RESULTS}"
 
 # TODO: Deeply parse the results with jq, and display the parsed results.
 
