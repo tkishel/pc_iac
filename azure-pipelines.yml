@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: Prisma Cloud IaC Scan@2
+  - task: Prisma Cloud IaC Scan@3
     inputs:
       Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
       prismaCloudService: 'PrismaCloudIACScanService'
@@ -25,7 +25,7 @@ steps:
       Dockerfile: '**/Dockerfile'
       arguments: '-t tryme'
       addPipelineData: false
-  - task: prisma-cloud-compute-scan@2
+  - task: prisma-cloud-compute-scan@3
     condition: always()
     inputs:
       scanType: 'images'
