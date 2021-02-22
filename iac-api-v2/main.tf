@@ -20,7 +20,7 @@ resource "aws_s3_bucket" "foo" {
 # versioning enabled: true vs false
 
 ####
-# Disable Global Protect!
+# Disable Global Protect
 # To Avoid:
 # Error: Error building account: Error getting authenticated object ID: Error parsing json result from the Azure CLI: Error waiting for the Azure CLI: exit status 1
 ####
