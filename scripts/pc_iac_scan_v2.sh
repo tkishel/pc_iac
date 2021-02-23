@@ -86,7 +86,7 @@ find_recurse_parent() {
 
 read_yaml() {
   if [ -n "${1}" ]; then
-    if $(yq --version | grep 'version 3'); then
+    if yq --version | grep 'version 3'; then
       yq read -j "${1}"  
     else
       yq eval -j "${1}"  
@@ -260,6 +260,16 @@ PC_IAC_RESULTS=/tmp/prisma-scan-results.json
 
 #### MAIN
 
+# Validate terraform before scanning, to save 
+
+if [ "${CONF_TYPE}" == "tf" ]; then
+  if type "terraform" > /dev/null; then
+    cd "${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}"
+    terraform validate > /dev/null 2>&1 || error_and_exit "Please 'terraform validate' your templates."
+    cd - || error_and_exit "Unable to change directory"
+  fi
+fi
+
 #### Use the active login, or login.
 #
 # https://api.docs.prismacloud.io/reference#login
@@ -383,6 +393,7 @@ if [ -d "${TEMPLATE}" ] || [ -f "${TEMPLATE}" ] ; then
   cd "${TEMPLATE_DIRNAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}"
   rm -r -f "${TEMPLATE_ARCHIVE}"
   zip -r -q "${TEMPLATE_ARCHIVE}" "${TEMPLATE_BASENAME}" -x "*/.*" "*terraform.tfstate*"
+  cd - || error_and_exit "Unable to change directory"
 else
   error_and_exit "Template file or directory to scan is not a file or directory: ${TEMPLATE}"
 fi
