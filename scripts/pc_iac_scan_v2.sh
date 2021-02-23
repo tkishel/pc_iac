@@ -17,7 +17,6 @@
 
 DEBUG=false
 
-
 #### BEGIN USER CONFIGURATION
 
 # Prisma Cloud › Access URL: Prisma Cloud API URL
@@ -108,6 +107,7 @@ prisma_usage() {
   echo "  --medium, -m   The threshhold of medium-severity violations that define a scan failure"
   echo "  --low, -l      The threshhold of low-severity violations that define a scan failure"
   echo "  --operator, -o The logic operator for high, medium, and low-severity failure threshholds"
+  echo "  --validate, -v Validate Terraform (limited to directories) before scanning"
   echo ""
 }
 
@@ -157,6 +157,7 @@ FAILURE_CRITERIA_HIGH=3
 FAILURE_CRITERIA_MEDIUM=6
 FAILURE_CRITERIA_LOW=9
 FAILURE_CRITERIA_OPERATOR='or'
+VALIDATE_TERRAFORM=false
 
 while (( "${#}" )); do
   case "${1}" in
@@ -207,6 +208,10 @@ while (( "${#}" )); do
         prisma_usage
         error_and_exit "Argument for ${1} not specified"
       fi
+      ;;
+    -v|--validate)
+      VALIDATE_TERRAFORM=true
+      shift
       ;;
     -*)
       # Unsupported flags.
@@ -260,13 +265,25 @@ PC_IAC_RESULTS=/tmp/prisma-scan-results.json
 
 #### MAIN
 
-# Validate terraform before scanning, to save 
+# Validate terraform before scanning.
 
-if [ "${CONF_TYPE}" == "tf" ]; then
-  if type "terraform" > /dev/null; then
-    cd "${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}"
-    terraform validate > /dev/null 2>&1 || error_and_exit "Please 'terraform validate' your templates."
-    cd - || error_and_exit "Unable to change directory"
+if $VALIDATE_TERRAFORM; then
+  if [ "${CONF_TYPE}" == "tf" ]; then
+    if [ -d "${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}" ]; then
+      if type "terraform" > /dev/null; then
+        echo "Validating Terraform Directory"
+        # TODO: 'cd "${TEMPLATE_DIRNAME}"' and 'terraform validate "${TEMPLATE_BASENAME}"' instead?
+        cd "${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}/${TEMPLATE_BASENAME}"
+        terraform validate > /dev/null 2>&1 || error_and_exit "Please 'terraform validate' your templates."
+        cd - > /dev/null || error_and_exit "Unable to change current directory"
+      else
+        echo "Command not found, cannot 'terraform validate' prior to scan"
+      fi
+    else
+      echo "Template not a directory, cannot 'terraform validate' prior to scan"
+    fi
+  else
+    echo "Template not Terraform, cannot 'terraform validate' prior to scan"
   fi
 fi
 
@@ -393,7 +410,7 @@ if [ -d "${TEMPLATE}" ] || [ -f "${TEMPLATE}" ] ; then
   cd "${TEMPLATE_DIRNAME}" || error_and_exit "Unable to change into ${TEMPLATE_DIRNAME}"
   rm -r -f "${TEMPLATE_ARCHIVE}"
   zip -r -q "${TEMPLATE_ARCHIVE}" "${TEMPLATE_BASENAME}" -x "*/.*" "*terraform.tfstate*"
-  cd - || error_and_exit "Unable to change directory"
+  cd - > /dev/null || error_and_exit "Unable to change to current directory"
 else
   error_and_exit "Template file or directory to scan is not a file or directory: ${TEMPLATE}"
 fi
