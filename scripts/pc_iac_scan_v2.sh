@@ -138,6 +138,21 @@ prisma_cloud_config_tags() {
   fi
 }
 
+prisma_cloud_check_token() {
+  NOW=$(date +%s)
+  if [[ $NOW -ge $TOKEN_EXPIRING ]]; then
+    debug "Token Expiring: ${NOW} > ${TOKEN_EXPIRING}"
+    curl --fail --silent --show-error \
+      --request GET "${API}/auth_token/extend" \
+      --header 'Accept: */*'
+    if [ $? -ne 0 ]; then
+      error_and_exit "API Token Extend Failed"
+    fi
+    TOKEN_EXPIRING=$(( $(date +%s) + $TOKEN_LIFETIME ))
+    debug "Token Extended To: ${TOKEN_EXPIRING}"
+  fi
+}
+
 #### PREREQUISITES
 
 if ! type "jq" > /dev/null; then
@@ -150,6 +165,7 @@ fi
 
 #### PARAMETERS AND VARIABLES
 
+NOW=$(date +%s)
 TEMPLATE=""
 FAILURE_CRITERIA_HIGH=3
 FAILURE_CRITERIA_MEDIUM=6
@@ -295,12 +311,6 @@ fi
 #### Use the active login, or login.
 #
 # https://api.docs.prismacloud.io/reference#login
-#
-# TODO:
-#
-# The login token is valid for 10 minutes.
-# Refresh instead of replace, if it exists, as per:
-# https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin/get-started-with-prisma-cloud/access-the-prisma-cloud-api.html
 
 echo "Logging on and creating an API Token"
 
@@ -317,6 +327,11 @@ fi
 if [ $? -ne 0 ]; then
   error_and_exit "API Login Failed"
 fi
+
+# https://api.docs.prismacloud.io/reference#extend-session
+
+TOKEN_LIFETIME=540 # nine minutes (in seconds) out of an actual ten minute lifetime
+TOKEN_EXPIRING=$(( $(date -r $PC_API_LOGIN_FILE +%s) + $TOKEN_LIFETIME ))
 
 # Check the output instead of checking the response code.
 
@@ -368,6 +383,7 @@ if [ -n "${CONF_TAGS}" ]; then
 fi
 
 rm -f "${PC_IAC_CREATE_FILE}"
+prisma_cloud_check_token
 curl --silent --show-error \
   --request POST "${API}/iac/v2/scans" \
   --header "x-redlock-auth: ${TOKEN}" \
@@ -421,6 +437,7 @@ else
 fi
 
 rm -f "${PC_IAC_UPLOAD_FILE}"
+prisma_cloud_check_token
 curl --silent --show-error \
   --request PUT "${PC_IAC_URL}" \
   --upload-file "${TEMPLATE_ARCHIVE}" \
@@ -461,6 +478,7 @@ if [ -n "${CONF_VERS}" ]; then
 fi
 
 rm -f "${PC_IAC_START_FILE}"
+prisma_cloud_check_token
 curl --silent --show-error \
   --request POST "${API}/iac/v2/scans/${PC_IAC_ID}" \
   --header "x-redlock-auth: ${TOKEN}" \
@@ -505,6 +523,7 @@ do
   sleep 4
 
   rm -f "${PC_IAC_STATUS_FILE}"
+  prisma_cloud_check_token
   HTTP_CODE=$(curl --silent --write-out '%{http_code}' \
     --request GET "${API}/iac/v2/scans/${PC_IAC_ID}/status" \
     --header "x-redlock-auth: ${TOKEN}" \
@@ -540,6 +559,7 @@ echo
 echo "Querying Scan Results"
 
 rm -f "${PC_IAC_RESULTS}"
+prisma_cloud_check_token
 curl --fail --silent --show-error \
   --request GET "${API}/iac/v2/scans/${PC_IAC_ID}/results" \
   --header "x-redlock-auth: ${TOKEN}" \
