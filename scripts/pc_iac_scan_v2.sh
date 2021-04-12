@@ -15,8 +15,6 @@
 #
 # ~/pc_iac_scan.sh <template_file_or_directory_to_scan> [-h 1 -m 2 -l 3 -o or]"
 
-DEBUG=false
-
 #### BEGIN USER CONFIGURATION
 
 # Prisma Cloud › Access URL: Prisma Cloud API URL
@@ -158,6 +156,7 @@ FAILURE_CRITERIA_MEDIUM=6
 FAILURE_CRITERIA_LOW=9
 FAILURE_CRITERIA_OPERATOR='or'
 VALIDATE_TERRAFORM=false
+DEBUG=false
 
 while (( "${#}" )); do
   case "${1}" in
@@ -213,6 +212,10 @@ while (( "${#}" )); do
       VALIDATE_TERRAFORM=true
       shift
       ;;
+    -d|--debug)
+      DEBUG=true
+      shift
+      ;;
     -*)
       # Unsupported flags.
       prisma_usage
@@ -264,6 +267,8 @@ PC_IAC_STATUS_FILE=/tmp/prisma-scan-status.json
 PC_IAC_RESULTS=/tmp/prisma-scan-results.json
 
 #### MAIN
+
+debug "Starting at: $(date)"
 
 # Validate terraform before scanning.
 
@@ -567,3 +572,5 @@ echo "Scan ${SCAN_STATUS}!"
 echo "(Based upon these thresholds: High: ${FAILURE_CRITERIA_HIGH}, Medium: ${FAILURE_CRITERIA_MEDIUM}, Low: ${FAILURE_CRITERIA_LOW}, with Operator: ${FAILURE_CRITERIA_OPERATOR})"
 
 echo
+
+debug "Done at: $(date)"
