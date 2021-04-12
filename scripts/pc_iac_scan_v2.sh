@@ -144,6 +144,7 @@ prisma_cloud_check_token() {
     debug "Token Expiring: ${NOW} > ${TOKEN_EXPIRING}"
     curl --fail --silent --show-error \
       --request GET "${API}/auth_token/extend" \
+      --header "x-redlock-auth: ${TOKEN}" \
       --header 'Accept: */*'
     if [ $? -ne 0 ]; then
       error_and_exit "API Token Extend Failed"
