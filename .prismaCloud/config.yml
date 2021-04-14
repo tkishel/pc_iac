@@ -10,7 +10,5 @@ terraform_012_parameters:
 #    - iac-api-v2/variables.tf
 #
 tags:
-  org: TJKPANW
-  team: TJKPC
-  group: TJKSE
-  env: TJKDEV
+  team: pcxyz
+

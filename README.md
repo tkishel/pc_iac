@@ -8,13 +8,14 @@ A minimum viable Terraform project for IaC scanning via the following integratio
 * Azure DevOps
 * CircleCI
 * GitHub
+* GitLab (Templates)
 * IntelliJ IDEA
 * Visual Studio Code
 
 To Do:
 
 * BitBucket
-* GitLab
+* GitLab (Container)
 * Jenkins
 
 ## Usage

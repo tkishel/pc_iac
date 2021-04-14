@@ -6,6 +6,19 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "azurerm" {
+  features {}
+}
+
+provider "google" {
+  region = var.google_region
+}
+
+
+
+
+
+
 resource "aws_s3_bucket" "foo" {
   bucket        = "bar-pc-iac"
   acl           = "public-read-write"
@@ -13,20 +26,6 @@ resource "aws_s3_bucket" "foo" {
   versioning {
      enabled = false
   }
-}
-
-# For comparison:
-# acl: "public-read-write" vs "private"
-# versioning enabled: true vs false
-
-####
-# Disable Global Protect
-# To Avoid:
-# Error: Error building account: Error getting authenticated object ID: Error parsing json result from the Azure CLI: Error waiting for the Azure CLI: exit status 1
-####
-
-provider "azurerm" {
-  features {}
 }
 
 resource "azurerm_resource_group" "foo" {
@@ -42,16 +41,25 @@ resource "azurerm_storage_account" "foo" {
   account_replication_type = "LRS"
 }
 
-####
-
-provider "google" {
-  region = var.google_region
-}
-
 resource "google_storage_bucket" "foo" {
   name          = "bar-pc-iac"
   location      = var.google_region
   force_destroy = true
 }
 
-# change
+
+
+
+
+
+
+
+# For comparison:
+# acl: "public-read-write" vs "private"
+# versioning enabled: true vs false
+
+####
+# Disable Global Protect
+# To Avoid:
+# Error: Error building account: Error getting authenticated object ID: Error parsing json result from the Azure CLI: Error waiting for the Azure CLI: exit status 1
+####

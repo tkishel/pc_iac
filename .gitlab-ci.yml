@@ -1,0 +1,28 @@
+include:
+  - remote: 'https://gitlab.com/prismacloud-public/shift-left/extension/-/raw/master/.pcs.gitlab-ci.yml'
+
+stages:
+  - build
+    
+prisma-cloud-scan:
+  stage: build
+  extends: .pcs_iac_scan
+  variables:
+    prisma_cloud_api_url: https://api.prismacloud.io
+    prisma_cloud_access_key: ${prisma_cloud_access_key}
+    prisma_cloud_secret_key: ${prisma_cloud_secret_key}
+    prisma_cloud_asset_name: ${CI_PROJECT_NAME}
+    prisma_cloud_cicd_tags: "tool:GitLab, example:True"
+    prisma_cloud_repo_dir: ${CI_PROJECT_DIR}/iac-api-v2
+
+#prisma-cloud-compute-scan:
+#  stage: build
+#  extends: .pcs_compute_scan
+#  variables:
+#    prisma_cloud_scan_image: nginx:latest
+#  script:
+#    # TODO:
+#    # Read image out of the DOCKERFILE
+#    # Solve "This job is stuck because you don't have any active runners online or available with any of these tags assigned to them: shell.""
+#    - docker pull ${prisma_cloud_scan_image}
+#    - ./image_scan.sh
