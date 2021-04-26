@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "foo" {
   acl           = "public-read-write"
   force_destroy = true
   versioning {
-     enabled = false
+     enabled = true
   }
 }
 
