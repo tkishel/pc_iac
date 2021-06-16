@@ -10,3 +10,8 @@ terraform_012_parameters:
 #    variable_files:
 #    - example_with_variables/variables.tf
 #
+
+tags:
+  Org:  Engineering
+  Team: Shift_Left
+  Env: Dev
