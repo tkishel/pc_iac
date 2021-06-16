@@ -13,21 +13,8 @@ steps:
   - task: Prisma Cloud IaC Scan@3
     inputs:
       Path: '.'  # The .prismaCloud/config.yml sets the subdirectory
-      prismaCloudService: 'PrismaCloudIACScanService'
+      prismaCloudService: 'Prod'
       High: '3'
       Medium: '3'
       Low: '3'
       Operator: 'or'
-  - task: Docker@2
-    condition: always()
-    inputs:
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      arguments: '-t tryme'
-      addPipelineData: false
-  - task: prisma-cloud-compute-scan@3
-    condition: always()
-    inputs:
-      scanType: 'images'
-      twistlockService: 'PrismaCloudComputeIACScanService'
-      artifact: 'tryme'
