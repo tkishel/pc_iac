@@ -1,13 +1,13 @@
 template_type: TF
 terraform_version: 0.12
 terraform_012_parameters:
-  - root_module: iac-api-v1
+  - root_module: example
 #
 #template_version: 0.12
 #template_parameters:
-#  - root_module: iac-api-v2
+#  - root_module: example_with_variables
 #    variable_files:
-#    - iac-api-v2/variables.tf
+#    - example_with_variables/variables.tf
 #
 tags:
   team: pcxyz

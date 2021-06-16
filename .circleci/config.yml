@@ -70,7 +70,7 @@ workflows:
           #
           # CircleCI does not read root_module(s) from .prismaCloud/config.yml and scans this prisma_cloud_repo_dir.
           #
-          prisma_cloud_repo_dir: ./iac-api-v2
+          prisma_cloud_repo_dir: ./example_with_variables
           #
           # CircleCI reads tags from .prismaCloud/config.yml and appends these prisma_cloud_tags).
           #

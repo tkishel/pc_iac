@@ -13,7 +13,7 @@ prisma-cloud-scan:
     prisma_cloud_secret_key: ${prisma_cloud_secret_key}
     prisma_cloud_asset_name: ${CI_PROJECT_NAME}
     prisma_cloud_cicd_tags: "tool:GitLab, example:True"
-    prisma_cloud_repo_dir: ${CI_PROJECT_DIR}/iac-api-v2
+    prisma_cloud_repo_dir: ${CI_PROJECT_DIR}/example_with_variables
 
 #prisma-cloud-compute-scan:
 #  stage: build
