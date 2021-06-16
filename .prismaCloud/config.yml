@@ -3,7 +3,7 @@ template_type: TF
 terraform_version: 0.12
 terraform_012_parameters:
   - root_module: example
-#
+
 #template_version: 0.12
 #template_parameters:
 #  - root_module: example_with_variables
