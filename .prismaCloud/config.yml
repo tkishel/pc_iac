@@ -1,6 +1,3 @@
 template_type: TF
-#terraform_version: 0.12
 
-tags:
-  team: pcxyz
 
