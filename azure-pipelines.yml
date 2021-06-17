@@ -31,3 +31,4 @@ steps:
       scanType: 'images'
       twistlockService: 'PrismaCloudComputeIACScanService'
       artifact: 'tryme'
+
